@@ -10,7 +10,11 @@ public class TaskList {
     public void addTask(Task task) {
         taskList[currSize] = task;
         currSize++;
-        System.out.println(JustAChillGuy.wrapInLines("added: " + task));
+        System.out.println(JustAChillGuy.wrapInLines(
+                "Sure man, I've added this task for ya: \n"
+                + "  " + task + "\n"
+                + "You've got " + this.currSize + " tasks in the list yea"
+        ));
     }
 
     public void markTask(int i) {
