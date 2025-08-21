@@ -31,6 +31,12 @@ public class JustAChillGuy {
                 System.out.println(wrapInLines(goodbyeMessage));
             } else if (input.equals("list")) {
                 System.out.println(taskList);
+            } else if (input.startsWith("mark")) {
+                int index = Integer.parseInt(input.split(" ")[1]);
+                taskList.markTask(index);
+            } else if (input.startsWith("unmark")) {
+                int index = Integer.parseInt(input.split(" ")[1]);
+                taskList.unmarkTask(index);
             } else {
                 taskList.addTask(new Task(input));
             }

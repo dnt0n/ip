@@ -13,6 +13,22 @@ public class TaskList {
         System.out.println(JustAChillGuy.wrapInLines("added: " + task));
     }
 
+    public void markTask(int i) {
+        Task task = taskList[i-1];
+        task.mark();
+        System.out.println(JustAChillGuy.wrapInLines(
+                "Yo, nice job! I've marked this task as done for ya: \n" + task
+        ));
+    }
+
+    public void unmarkTask(int i) {
+        Task task = taskList[i-1];
+        task.unmark();
+        System.out.println(JustAChillGuy.wrapInLines(
+                "Alright! I've unmarked this task as not done for ya: \n" + task
+        ));
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
