@@ -13,11 +13,13 @@ public class JustAChillGuy {
     }
 
     public static void main(String[] args) {
-        boolean isRunning = true;
-        Scanner sc = new Scanner(System.in);
         String name = "Just A Chill Guy";
         String greetingMessage = "Yo! I am ✨" + name + "✨ :) \n" + "How can I help ya?";
         String goodbyeMessage = "Goodbye mate! See ya next time!";
+
+        boolean isRunning = true;
+        TaskList taskList = new TaskList();
+        Scanner sc = new Scanner(System.in);
 
         System.out.println(wrapInLines(greetingMessage));
 
@@ -27,8 +29,10 @@ public class JustAChillGuy {
             if (input.equals("bye")) {
                 isRunning = false;
                 System.out.println(wrapInLines(goodbyeMessage));
+            } else if (input.equals("list")) {
+                System.out.println(taskList);
             } else {
-                System.out.println(wrapInLines(input));
+                taskList.addTask(new Task(input));
             }
         }
 
