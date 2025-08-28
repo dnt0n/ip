@@ -36,6 +36,10 @@ public class JustAChillGuy {
     private static final String FILE_PATH = "./data/justachillguy.txt";
 
     public static void main(String[] args) {
+        run();
+    }
+
+    public static void run() {
         boolean isRunning = true;
         Storage storage = new Storage(FILE_PATH);
         TaskList taskList = null;
@@ -54,17 +58,10 @@ public class JustAChillGuy {
         while (isRunning) {
             String input = sc.nextLine().trim(); // to trim leading and trailing spaces
             try {
-                if (input.isEmpty()) {
-                    throw new JustAChillGuyException("Input cannot be empty");
-                }
-
-                String[] parts = input.split(" ", 2); // limit the output array length to maximum 2
-                String commandWord = parts[0];
-                String argsText = (parts.length > 1) ? parts[1].trim() : ""; // handle the case where input is just one word
-
-                Command command = Command.from(commandWord);
+                Object[] parsed = Parser.parseInputIntoCommandAndArgs(input);
+                Command command = (Command) parsed[0];
+                String argsText = (String) parsed[1];
                 isRunning = handleCommand(command, argsText, taskList); // handleCommand will return false if the command is bye, true otherwise
-
             } catch (JustAChillGuyException e) {
                 UI.display(e.getMessage());
             }

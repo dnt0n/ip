@@ -1,6 +1,6 @@
 public class TaskFactory {
-    public static Task parseTask(String line) {
-        String[] components = line.split(" \\|");
+    public static Task parseTask(String line) throws JustAChillGuyException {
+        String[] components = line.split(" \\| ");
         String type = components[0];
         boolean isDone = components[1].equals("1");
         String taskName = components[2];

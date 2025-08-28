@@ -1,18 +1,23 @@
-public class Deadline extends Task {
-    private String byTime;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Deadline(String name, String byTime) {
+public class Deadline extends Task {
+    private LocalDateTime byTime;
+
+    public Deadline(String name, String byTime) throws JustAChillGuyException {
         super(name);
-        this.byTime = byTime;
+        this.byTime = Parser.parseStringIntoLocalDateTime(byTime);
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.byTime + ")";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy HHmm");
+        return "[D]" + super.toString() + " (by: " + this.byTime.format(formatter) + ")";
     }
 
     @Override
     public String saveFormat() {
-        return "D | " + (this.isDone() ? 1 : 0) + " | " + this.getName() + " | " + this.byTime;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HHmm");
+        return "D | " + (this.isDone() ? 1 : 0) + " | " + this.getName() + " | " + this.byTime.format(formatter);
     }
 }
