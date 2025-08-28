@@ -1,5 +1,5 @@
 public enum Command {
-    BYE, HELLO, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, UNKNOWN;
+    BYE, HELLO, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN;
 
     public static Command from(String commandWord) {
         try {

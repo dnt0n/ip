@@ -122,6 +122,15 @@ public class JustAChillGuy {
                 taskList.addTask(new Event(eventName, from, to));
                 break;
 
+            case DELETE:
+                try {
+                    int index = Integer.parseInt(argsText);
+                    taskList.deleteTask(index);
+                } catch (NumberFormatException e) {
+                    throw new JustAChillGuyException("Yo, your index isn't valid!");
+                }
+                break;
+
             case UNKNOWN:
                 throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe?");
 
