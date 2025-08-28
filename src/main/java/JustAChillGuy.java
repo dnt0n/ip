@@ -1,68 +1,132 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class JustAChillGuy {
-    public static String wrapInLines(String str) {
-        String[] lines = str.split("\n");
-        StringBuilder sb = new StringBuilder();
-        sb.append("____________________________________________________________\n");
-        for (String line : lines) {
-            sb.append("  ").append(line).append("\n");
-        }
-        sb.append("____________________________________________________________\n");
-        return sb.toString();
-    }
-
-    // added this comment to push a new tag
+    private static final String NAME = "Just A Chill Guy";
+    private static final String GREETING = "Yo! I am ✨" + NAME + "✨ :)\nHow can I help ya?";
+    private static final String HELLO = "Hey, how is it going?";
+    private static final String GOODBYE = "Goodbye mate! See ya next time!";
 
     public static void main(String[] args) {
-        String name = "Just A Chill Guy";
-        String greetingMessage = "Yo! I am ✨" + name + "✨ :) \n" + "How can I help ya?";
-        String goodbyeMessage = "Goodbye mate! See ya next time!";
-
         boolean isRunning = true;
         TaskList taskList = new TaskList();
         Scanner sc = new Scanner(System.in);
 
-        System.out.println(wrapInLines(greetingMessage));
+        UI.display(GREETING);
 
         while (isRunning) {
-            String input = sc.nextLine();
+            String input = sc.nextLine().trim(); // to trim leading and trailing spaces
+            try {
+                if (input.isEmpty()) {
+                    throw new JustAChillGuyException("Input cannot be empty");
+                }
 
-            if (input.equals("bye")) {
-                isRunning = false;
-                System.out.println(wrapInLines(goodbyeMessage));
+                String[] parts = input.split(" ", 2); // limit the output array length to maximum 2
+                String commandWord = parts[0];
+                String argsText = (parts.length > 1) ? parts[1].trim() : ""; // handle the case where input is just one word
 
-            } else if (input.equals("list")) {
-                System.out.println(taskList);
+                Command command = Command.from(commandWord);
+                isRunning = handleCommand(command, argsText, taskList); // handleCommand will return false if the command is bye, true otherwise
 
-            } else if (input.startsWith("mark")) {
-                int index = Integer.parseInt(input.split(" ")[1]);
-                taskList.markTask(index);
-            } else if (input.startsWith("unmark")) {
-                int index = Integer.parseInt(input.split(" ")[1]);
-                taskList.unmarkTask(index);
-
-            } else if (input.startsWith("todo ")) {
-                String taskName = input.substring(5);
-                taskList.addTask(new ToDo(taskName));
-            } else if (input.startsWith("deadline ")) {
-                String toParse = input.substring(9);
-                String[] nameAndBy = toParse.split("/by ");
-                String taskName = nameAndBy[0];
-                String by = nameAndBy[1];
-                taskList.addTask(new Deadline(taskName, by));
-            } else if (input.startsWith("event ")) {
-                String toParse = input.substring(6);
-                String toParse2 = toParse.replace(" /from ", "%%%").replace(" /to ", "%%%");
-                String[] nameAndFromAndTo = toParse2.split("%%%");
-                String taskName = nameAndFromAndTo[0];
-                String from = nameAndFromAndTo[1];
-                String to = nameAndFromAndTo[2];
-                taskList.addTask(new Event(taskName, from, to));
+            } catch (JustAChillGuyException e) {
+                UI.display(e.getMessage());
             }
         }
+    }
 
-        sc.close();
+    public static boolean handleCommand(Command command, String argsText, TaskList taskList) throws JustAChillGuyException {
+        switch (command) {
+            case BYE:
+                UI.display(GOODBYE);
+                return false; // this will set isRunning to false;
+
+            case HELLO:
+                UI.display(HELLO);
+                break;
+
+            case LIST:
+                UI.display(taskList.toString());
+                break;
+
+            case MARK:
+                try {
+                    int index = Integer.parseInt(argsText);
+                    taskList.markTask(index);
+                } catch (NumberFormatException e) {
+                    throw new JustAChillGuyException("Yo, your index isn't valid!");
+                }
+                break;
+
+            case UNMARK:
+                try {
+                    int index = Integer.parseInt(argsText);
+                    taskList.unmarkTask(index);
+                } catch (NumberFormatException e) {
+                    throw new JustAChillGuyException("Yo, your index isn't valid!");
+                }
+
+            case TODO:
+                if (argsText.isEmpty()) {
+                    throw new JustAChillGuyException("Yo, what todo task do you want me to add to the list?");
+                }
+                taskList.addTask(new ToDo(argsText));
+                break;
+
+            case DEADLINE:
+                if (argsText.isEmpty()) { // if there is no argument body
+                    throw new JustAChillGuyException("Yo, what deadline do you want me to add to the list?");
+                }
+                if (!argsText.contains("/by")) { // if no /by used
+                    throw new JustAChillGuyException("Yo, specify the deadline using /by!");
+                }
+
+                String[] nameAndBy = argsText.split("/by", 2);
+                String deadlineName = nameAndBy[0].trim();
+                String by = nameAndBy[1].trim();
+
+                if (deadlineName.isEmpty()) {
+                    throw new JustAChillGuyException("Yo, your task has no name!");
+                }
+                if (by.isEmpty()) {
+                    throw new JustAChillGuyException("Yo, what is the deadline of your task?");
+                }
+
+                taskList.addTask(new Deadline(deadlineName, by));
+                break;
+
+            case EVENT:
+                if (argsText.isEmpty()) { // if no argument body
+                    throw new JustAChillGuyException("Yo, what event do you want me to add to the list?");
+                }
+                if (!argsText.contains("/from") || !argsText.contains("/to")) { // if missing required keywords
+                    throw new JustAChillGuyException("Yo, specify the event duration using /from and /to!");
+                }
+
+                String[] nameAndFrom = argsText.split("/from", 2);
+                String eventName = nameAndFrom[0].trim();
+
+                if (eventName.isEmpty()) {
+                    throw new JustAChillGuyException("Yo, your event has no name!");
+                }
+
+                String[] fromAndTo = nameAndFrom[1].split("/to", 2);
+                String from = fromAndTo[0].trim();
+                String to = fromAndTo[1].trim();
+
+                if (from.isEmpty()) {
+                    throw new JustAChillGuyException("Yo, when does your event start? (/from ...)");
+                }
+                if (to.isEmpty()) {
+                    throw new JustAChillGuyException("Yo, when does your event end? (/to ...)");
+                }
+
+                taskList.addTask(new Event(eventName, from, to));
+                break;
+
+            case UNKNOWN:
+                throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe?");
+
+        }
+
+        return true;
     }
 }
