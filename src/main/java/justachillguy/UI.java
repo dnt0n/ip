@@ -1,3 +1,5 @@
+package justachillguy;
+
 public class UI {
 
     public static String wrapInLines(String str) {

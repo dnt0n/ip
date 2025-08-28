@@ -1,3 +1,5 @@
+package justachillguy;
+
 import java.util.Scanner;
 
 public class JustAChillGuy {
@@ -16,9 +18,9 @@ public class JustAChillGuy {
                     + "👉 Task management:\n"
                     + "   todo <task name>     - Add a ToDo task\n"
                     + "   deadline <name> /by <date/time>\n"
-                    + "                        - Add a Deadline task with due date/time\n"
+                    + "                        - Add a justachillguy.Deadline task with due date/time\n"
                     + "   event <name> /from <start> /to <end>\n"
-                    + "                        - Add an Event task with start and end times\n"
+                    + "                        - Add an justachillguy.Event task with start and end times\n"
                     + "\n"
                     + "👉 Task updates:\n"
                     + "   mark <index>         - Mark the task at position <index> as done\n"

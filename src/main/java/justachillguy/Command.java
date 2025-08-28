@@ -1,3 +1,5 @@
+package justachillguy;
+
 public enum Command {
     HELLO, BYE, HELP, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN;
 

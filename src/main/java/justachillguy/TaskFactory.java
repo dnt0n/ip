@@ -1,3 +1,8 @@
+package justachillguy;
+
+import justachillguy.Deadline;
+import justachillguy.Event;
+
 public class TaskFactory {
     public static Task parseTask(String line) throws JustAChillGuyException {
         String[] components = line.split(" \\| ");
