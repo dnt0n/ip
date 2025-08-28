@@ -24,7 +24,7 @@ public class Parser {
         } catch (DateTimeParseException e) {
             throw new JustAChillGuyException(
                     "Yo, I couldn’t understand that date/time format. \n"
-                            + "Try using yyyy-M-d HHmm (e.g., 2003-6-19 1800)."
+                            + "Try using yyyy-M-d HHmm (e.g., 2003-6-19 1800). "
             );
         }
     }
