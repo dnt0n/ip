@@ -29,6 +29,10 @@ public class Task {
         return "Task | " + (this.isDone() ? 1 : 0) + " | " + this.getName();
     }
 
+    public boolean containsKeyword(String keyword) {
+        return this.name.contains(keyword);
+    }
+
     @Override
     public String toString() {
         String status = "[" + (this.isDone ? "X" : " ") + "] ";

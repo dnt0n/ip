@@ -14,18 +14,22 @@ public class JustAChillGuy {
                     + "   hello                - I’ll greet you back\n"
                     + "   bye                  - Exit the program\n"
                     + "   list                 - Show all your tasks\n"
+                    + "   help                 - Show this help menu\n"
                     + "\n"
                     + "👉 Task management:\n"
                     + "   todo <task name>     - Add a ToDo task\n"
                     + "   deadline <name> /by <date/time>\n"
-                    + "                        - Add a justachillguy.Deadline task with due date/time\n"
+                    + "                        - Add a Deadline task with due date/time\n"
                     + "   event <name> /from <start> /to <end>\n"
-                    + "                        - Add an justachillguy.Event task with start and end times\n"
+                    + "                        - Add an Event task with start and end times\n"
                     + "\n"
                     + "👉 Task updates:\n"
                     + "   mark <index>         - Mark the task at position <index> as done\n"
                     + "   unmark <index>       - Mark the task at position <index> as not done\n"
                     + "   delete <index>       - Remove the task at position <index>\n"
+                    + "\n"
+                    + "👉 Search:\n"
+                    + "   find <keyword>       - Find all tasks containing <keyword>\n"
                     + "\n"
                     + "👉 Notes:\n"
                     + "   - Index numbers start at 1 (as shown in list).\n"
@@ -86,6 +90,16 @@ public class JustAChillGuy {
 
             case LIST:
                 UI.display(taskList.toString());
+                break;
+
+            case FIND:
+                String keyword = argsText;
+                String outputList = taskList.findTasksBasedOnKeyword(keyword);
+                if (outputList.isEmpty()) {
+                    UI.display("Oops, I can't find any matching tasks :(");
+                } else {
+                    UI.display("Sure! I've found these matching tasks for yea!\n" + outputList);
+                }
                 break;
 
             case MARK:

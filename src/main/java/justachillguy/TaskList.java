@@ -72,6 +72,19 @@ public class TaskList {
         );
     }
 
+    public String findTasksBasedOnKeyword(String keyword) {
+        StringBuilder sb = new StringBuilder();
+        int idx = 1;
+        for (int i = 0; i < taskList.size(); i++) {
+            Task task = taskList.get(i);
+            if (task.containsKeyword(keyword)) {
+                sb.append(idx).append('.').append(task).append("\n");
+                idx++;
+            }
+        }
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         if (taskList.isEmpty()) {

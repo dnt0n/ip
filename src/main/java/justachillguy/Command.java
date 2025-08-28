@@ -1,7 +1,7 @@
 package justachillguy;
 
 public enum Command {
-    HELLO, BYE, HELP, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN;
+    HELLO, BYE, HELP, LIST, FIND, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN;
 
     public static Command from(String commandWord) {
         try {
