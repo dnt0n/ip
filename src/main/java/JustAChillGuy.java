@@ -2,13 +2,51 @@ import java.util.Scanner;
 
 public class JustAChillGuy {
     private static final String NAME = "Just A Chill Guy";
-    private static final String GREETING = "Yo! I am ✨" + NAME + "✨ :)\nHow can I help ya?";
+    private static final String GREETING = "Yo! I am ✨" + NAME + "✨ :)\nHow can I help ya? \n(Enter the command help to see the full list of actions)";
     private static final String HELLO = "Hey, how is it going?";
     private static final String GOODBYE = "Goodbye mate! See ya next time!";
+    private static final String HELP =
+            "Here’s what I can do for ya:\n"
+                    + "\n"
+                    + "👉 Basic commands:\n"
+                    + "   hello                - I’ll greet you back\n"
+                    + "   bye                  - Exit the program\n"
+                    + "   list                 - Show all your tasks\n"
+                    + "\n"
+                    + "👉 Task management:\n"
+                    + "   todo <task name>     - Add a ToDo task\n"
+                    + "   deadline <name> /by <date/time>\n"
+                    + "                        - Add a Deadline task with due date/time\n"
+                    + "   event <name> /from <start> /to <end>\n"
+                    + "                        - Add an Event task with start and end times\n"
+                    + "\n"
+                    + "👉 Task updates:\n"
+                    + "   mark <index>         - Mark the task at position <index> as done\n"
+                    + "   unmark <index>       - Mark the task at position <index> as not done\n"
+                    + "   delete <index>       - Remove the task at position <index>\n"
+                    + "\n"
+                    + "👉 Notes:\n"
+                    + "   - Index numbers start at 1 (as shown in list).\n"
+                    + "   - Tasks are auto-saved after every change.\n"
+                    + "   - Invalid input gives a friendly error instead of breaking the bot.\n"
+                    + "\n"
+                    + "✨ Chill and let me handle your tasks for ya! ✨";
+
+
+    private static final String FILE_PATH = "./data/justachillguy.txt";
 
     public static void main(String[] args) {
         boolean isRunning = true;
-        TaskList taskList = new TaskList();
+        Storage storage = new Storage(FILE_PATH);
+        TaskList taskList = null;
+
+        try {
+            taskList = new TaskList(storage);
+        } catch (JustAChillGuyException e) {
+            UI.display(e.getMessage());
+            taskList = new TaskList();
+        }
+
         Scanner sc = new Scanner(System.in);
 
         UI.display(GREETING);
@@ -41,6 +79,10 @@ public class JustAChillGuy {
 
             case HELLO:
                 UI.display(HELLO);
+                break;
+
+            case HELP:
+                UI.display(HELP);
                 break;
 
             case LIST:

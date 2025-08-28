@@ -15,6 +15,18 @@ public class Task {
         this.isDone = false;
     }
 
+    public boolean isDone() {
+        return this.isDone;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String saveFormat() {
+        return "Task | " + (this.isDone() ? 1 : 0) + " | " + this.getName();
+    }
+
     @Override
     public String toString() {
         String status = "[" + (this.isDone ? "X" : " ") + "] ";

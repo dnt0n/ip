@@ -2,13 +2,21 @@ import java.util.ArrayList;
 
 public class TaskList {
     private ArrayList<Task> taskList;
+    private Storage storage;
 
     public TaskList() {
         this.taskList = new ArrayList<>();
     }
 
-    public void addTask(Task task) {
+    public TaskList(Storage s) throws JustAChillGuyException {
+        this.storage = s;
+        this.taskList = s.loadTasks();
+    }
+
+    public void addTask(Task task) throws JustAChillGuyException {
         taskList.add(task);
+        this.storage.saveTasks(this.taskList);
+
         UI.display(
                 "Sure man, I've added this task for ya:\n"
                         + "  " + task + "\n"
@@ -16,7 +24,7 @@ public class TaskList {
         );
     }
 
-    public void markTask(int i) {
+    public void markTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
             UI.display("Hey, enter a valid index!");
             return;
@@ -24,12 +32,14 @@ public class TaskList {
 
         Task task = taskList.get(i - 1);
         task.mark();
+        this.storage.saveTasks(this.taskList);
+
         UI.display(
                 "Yo, nice job! I've marked this task as done for ya:\n" + task
         );
     }
 
-    public void unmarkTask(int i) {
+    public void unmarkTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
             UI.display("Hey, enter a valid index!");
             return;
@@ -37,18 +47,22 @@ public class TaskList {
 
         Task task = taskList.get(i - 1);
         task.unmark();
+        this.storage.saveTasks(this.taskList);
+
         UI.display(
                 "Alright! I've unmarked this task as not done for ya:\n" + task
         );
     }
 
-    public void deleteTask(int i) {
+    public void deleteTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
             UI.display("Hey, enter a valid index!");
             return;
         }
 
         Task removedTask = taskList.remove(i - 1);
+        this.storage.saveTasks(this.taskList);
+
         UI.display(
                 "Got it, I've removed this task for ya:\n"
                         + "  " + removedTask + "\n"
