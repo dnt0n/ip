@@ -1,9 +1,24 @@
 package justachillguy;
 
-import justachillguy.Deadline;
-import justachillguy.Event;
-
+/**
+ * Factory class for creating {@link Task} objects from their saved string format.
+ */
 public class TaskFactory {
+
+    /**
+     * Parses a line of text into the corresponding {@link Task}.
+     * <p>
+     * Expected formats:
+     * <ul>
+     *     <li>{@code T | 0 | task name}</li>
+     *     <li>{@code D | 1 | task name | yyyy-M-d HHmm}</li>
+     *     <li>{@code E | 0 | task name | yyyy-M-d HHmm | yyyy-M-d HHmm}</li>
+     * </ul>
+     *
+     * @param line the saved string representation of a task
+     * @return the corresponding {@code Task}, or {@code null} if type is unknown
+     * @throws JustAChillGuyException if parsing a date/time fails
+     */
     public static Task parseTask(String line) throws JustAChillGuyException {
         String[] components = line.split(" \\| ");
         String type = components[0];
