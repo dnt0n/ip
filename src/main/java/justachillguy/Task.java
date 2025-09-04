@@ -55,7 +55,7 @@ public class Task {
      *
      * @return string in save file format
      */
-    public String saveFormat() {
+    public String getSaveFormat() {
         return "Task | " + (this.isDone() ? 1 : 0) + " | " + this.getName();
     }
 
@@ -66,7 +66,7 @@ public class Task {
      * @return {@code true} if the name contains the keyword, {@code false} otherwise
      */
     public boolean containsKeyword(String keyword) {
-        return this.name.contains(keyword);
+        return this.name.toLowerCase().contains(keyword);
     }
 
     /**

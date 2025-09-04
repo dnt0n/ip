@@ -70,7 +70,7 @@ public class Storage {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(filePath)); // rewrites the file
             for (Task task : tasks) {
-                bw.write(task.saveFormat());
+                bw.write(task.getSaveFormat());
                 bw.newLine();
             }
             bw.close();

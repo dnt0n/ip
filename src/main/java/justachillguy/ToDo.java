@@ -31,7 +31,7 @@ public class ToDo extends Task {
      * @return string in save file format
      */
     @Override
-    public String saveFormat() {
+    public String getSaveFormat() {
         return "T | " + (this.isDone() ? 1 : 0) + " | " + this.getName();
     }
 }
