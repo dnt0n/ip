@@ -22,14 +22,14 @@ class ToDoTest {
     @Test
     void testSaveFormat_NotDone() {
         ToDo todo = new ToDo("Clean room");
-        assertEquals("T | 0 | Clean room", todo.saveFormat());
+        assertEquals("T | 0 | Clean room", todo.getSaveFormat());
     }
 
     @Test
     void testSaveFormat_Done() {
         ToDo todo = new ToDo("Do homework");
         todo.mark();
-        assertEquals("T | 1 | Do homework", todo.saveFormat());
+        assertEquals("T | 1 | Do homework", todo.getSaveFormat());
     }
 
     @Test

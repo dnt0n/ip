@@ -45,7 +45,7 @@ public class Event extends Task {
      * @return string in save file format
      */
     @Override
-    public String saveFormat() {
+    public String getSaveFormat() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HHmm");
         return "E | " + (this.isDone() ? 1 : 0) + " | "
                 + this.getName() + " | "

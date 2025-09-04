@@ -40,7 +40,7 @@ public class Deadline extends Task {
      * @return string in save file format
      */
     @Override
-    public String saveFormat() {
+    public String getSaveFormat() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HHmm");
         return "D | " + (this.isDone() ? 1 : 0) + " | " + this.getName() + " | " + this.byTime.format(formatter);
     }

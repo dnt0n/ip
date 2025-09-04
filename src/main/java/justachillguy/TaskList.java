@@ -35,7 +35,7 @@ public class TaskList {
      * @param task the task to add
      * @throws JustAChillGuyException if saving fails
      */
-    public void addTask(Task task) throws JustAChillGuyException {
+    public String addTask(Task task) throws JustAChillGuyException {
         taskList.add(task);
         this.storage.saveTasks(this.taskList);
 
@@ -44,6 +44,10 @@ public class TaskList {
                         + "  " + task + "\n"
                         + "You've got " + taskList.size() + " tasks in the list yea"
         );
+
+        return  "Sure man, I've added this task for ya:\n"
+                + "  " + task + "\n"
+                + "You've got " + taskList.size() + " tasks in the list yea";
     }
 
     /**
@@ -52,10 +56,10 @@ public class TaskList {
      * @param i the index of the task (1-based)
      * @throws JustAChillGuyException if saving fails
      */
-    public void markTask(int i) throws JustAChillGuyException {
+    public String markTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
             UI.display("Hey, enter a valid index!");
-            return;
+            return "Hey, enter a valid index!";
         }
 
         Task task = taskList.get(i - 1);
@@ -65,6 +69,8 @@ public class TaskList {
         UI.display(
                 "Yo, nice job! I've marked this task as done for ya:\n" + task
         );
+
+        return "Yo, nice job! I've marked this task as done for ya:\n" + task;
     }
 
     /**
@@ -73,10 +79,10 @@ public class TaskList {
      * @param i the index of the task (1-based)
      * @throws JustAChillGuyException if saving fails
      */
-    public void unmarkTask(int i) throws JustAChillGuyException {
+    public String unmarkTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
             UI.display("Hey, enter a valid index!");
-            return;
+            return "Hey, enter a valid index!";
         }
 
         Task task = taskList.get(i - 1);
@@ -86,6 +92,8 @@ public class TaskList {
         UI.display(
                 "Alright! I've unmarked this task as not done for ya:\n" + task
         );
+
+        return "Alright! I've unmarked this task as not done for ya:\n" + task;
     }
 
     /**
@@ -94,10 +102,10 @@ public class TaskList {
      * @param i the index of the task (1-based)
      * @throws JustAChillGuyException if saving fails
      */
-    public void deleteTask(int i) throws JustAChillGuyException {
+    public String deleteTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
             UI.display("Hey, enter a valid index!");
-            return;
+            return "Hey, enter a valid index!";
         }
 
         Task removedTask = taskList.remove(i - 1);
@@ -108,6 +116,10 @@ public class TaskList {
                         + "  " + removedTask + "\n"
                         + "Now you have " + taskList.size() + " tasks left in the list."
         );
+
+        return  "Got it, I've removed this task for ya:\n"
+                + "  " + removedTask + "\n"
+                + "Now you have " + taskList.size() + " tasks left in the list.";
     }
 
     /**
@@ -121,7 +133,7 @@ public class TaskList {
         int idx = 1;
         for (int i = 0; i < taskList.size(); i++) {
             Task task = taskList.get(i);
-            if (task.containsKeyword(keyword)) {
+            if (task.containsKeyword(keyword.toLowerCase())) {
                 sb.append(idx).append('.').append(task).append("\n");
                 idx++;
             }

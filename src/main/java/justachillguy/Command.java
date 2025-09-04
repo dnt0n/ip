@@ -8,7 +8,7 @@ package justachillguy;
  * to handle user input and map it to program actions.
  */
 public enum Command {
-    HELLO, BYE, HELP, LIST, FIND, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN;
+    GREET, HELLO, BYE, HELP, LIST, FIND, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN;
 
     public static Command from(String commandWord) {
         try {
