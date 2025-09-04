@@ -53,6 +53,11 @@ public class JustAChillGuy {
                     + "   event <name> /from <start> /to <end>\n"
                     + "                        - Add an Event task with start and end times\n"
                     + "\n"
+                    + "👉 Date & Time formats:\n"
+                    + "   - Use yyyy-MM-dd for dates (e.g., 2025-09-04)\n"
+                    + "   - Use HHmm for 24-hour time (e.g., 1830)\n"
+                    + "   - Combine them like yyyy-MM-dd HH:mm (e.g., 2025-09-04 1400)\n"
+                    + "\n"
                     + "👉 Task updates:\n"
                     + "   mark <index>         - Mark the task at position <index> as done\n"
                     + "   unmark <index>       - Mark the task at position <index> as not done\n"
@@ -64,7 +69,6 @@ public class JustAChillGuy {
                     + "👉 Notes:\n"
                     + "   - Index numbers start at 1 (as shown in list).\n"
                     + "   - Tasks are auto-saved after every change.\n"
-                    + "   - Invalid input gives a friendly error instead of breaking the bot.\n"
                     + "\n"
                     + "✨ Chill and let me handle your tasks for ya! ✨";
 
@@ -394,7 +398,8 @@ public class JustAChillGuy {
             }
 
         case UNKNOWN:
-            throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe?");
+            throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe? " +
+                    "\n(Enter \"help\" to see the full list of commands)");
         }
 
         return "Hey";
