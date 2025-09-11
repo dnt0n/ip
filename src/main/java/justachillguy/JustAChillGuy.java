@@ -122,6 +122,8 @@ public class JustAChillGuy {
             Object[] parsed = Parser.parseInputIntoCommandAndArgs(input);
             Command command = (Command) parsed[0];
             String argsText = (String) parsed[1];
+            assert command != null : "Command must not be null";
+            assert argsText != null : "Args text must not be null";
             UI.display(executeCommand(command, argsText, taskList));
             return command != Command.BYE;
         } catch (JustAChillGuyException e) {
@@ -158,6 +160,8 @@ public class JustAChillGuy {
             Object[] parsed = Parser.parseInputIntoCommandAndArgs(input);
             Command command = (Command) parsed[0];
             String argsText = (String) parsed[1];
+            assert command != null : "Command must not be null";
+            assert argsText != null : "Args text must not be null";
             output = executeCommand(command, argsText, this.taskList);
         } catch (JustAChillGuyException e) {
             output = e.getMessage();
@@ -216,6 +220,7 @@ public class JustAChillGuy {
             return handleDeleteCommand(argsText, taskList);
 
         default:
+            assert false : "Unhandled command: " + command;
             throw new JustAChillGuyException(ERR_UNKNOWN);
         }
     }

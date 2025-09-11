@@ -27,6 +27,7 @@ public class TaskList {
     public TaskList(Storage s) throws JustAChillGuyException {
         this.storage = s;
         this.taskList = s.loadTasks();
+        assert this.taskList != null : "Task list should not be null after loading from storage";
     }
 
     /**
@@ -39,7 +40,7 @@ public class TaskList {
         taskList.add(task);
         this.storage.saveTasks(this.taskList);
 
-        return  "Sure man, I've added this task for ya:\n"
+        return "Sure man, I've added this task for ya:\n"
                 + "  " + task + "\n"
                 + "You've got " + taskList.size() + " tasks in the list yea";
     }
@@ -56,6 +57,7 @@ public class TaskList {
         }
 
         Task task = taskList.get(i - 1);
+        assert task != null : "Task should exist at given index";
         task.mark();
         this.storage.saveTasks(this.taskList);
 

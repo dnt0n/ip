@@ -27,31 +27,43 @@ public class TaskFactory {
 
         switch (type) {
         case "T":
-            Task todo = new ToDo(taskName);
-            if (isDone) {
-                todo.mark();
-            }
-            return todo;
+            return getTodo(taskName, isDone);
 
         case "D":
             String by = components[3];
-            Task deadline = new Deadline(taskName, by);
-            if (isDone) {
-                deadline.mark();
-            }
-            return deadline;
+            return getDeadline(taskName, by, isDone);
 
         case "E":
             String from = components[3];
             String to = components[4];
-            Task event = new Event(taskName, from, to);
-            if (isDone) {
-                event.mark();
-            }
-            return event;
+            return getEvent(taskName, from, to, isDone);
 
         default:
             return null;
         }
+    }
+
+    private static Task getEvent(String taskName, String from, String to, boolean isDone) throws JustAChillGuyException {
+        Task event = new Event(taskName, from, to);
+        if (isDone) {
+            event.mark();
+        }
+        return event;
+    }
+
+    private static Task getDeadline(String taskName, String by, boolean isDone) throws JustAChillGuyException {
+        Task deadline = new Deadline(taskName, by);
+        if (isDone) {
+            deadline.mark();
+        }
+        return deadline;
+    }
+
+    private static Task getTodo(String taskName, boolean isDone) {
+        Task todo = new ToDo(taskName);
+        if (isDone) {
+            todo.mark();
+        }
+        return todo;
     }
 }
