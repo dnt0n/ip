@@ -30,6 +30,7 @@ public class Deadline extends Task {
      */
     @Override
     public String toString() {
+        // note to self: remember to remove magic strings like this and make them constants
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy HHmm");
         return "[D]" + super.toString() + " (by: " + this.byTime.format(formatter) + ")";
     }
@@ -41,6 +42,7 @@ public class Deadline extends Task {
      */
     @Override
     public String getSaveFormat() {
+        // note to self: remember to remove magic strings like this and make them constants
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HHmm");
         return "D | " + (this.isDone() ? 1 : 0) + " | " + this.getName() + " | " + this.byTime.format(formatter);
     }

@@ -281,7 +281,7 @@ public class JustAChillGuy {
             }
             break;
 
-        case UNKNOWN:
+        default:
             throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe?");
         }
 
@@ -397,11 +397,9 @@ public class JustAChillGuy {
                 throw new JustAChillGuyException("Yo, your index isn't valid!");
             }
 
-        case UNKNOWN:
-            throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe? " +
-                    "\n(Enter \"help\" to see the full list of commands)");
+        default:
+            throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe? "
+                    + "\n(Enter \"help\" to see the full list of commands)");
         }
-
-        return "Hey";
     }
 }

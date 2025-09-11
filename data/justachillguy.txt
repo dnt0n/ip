@@ -1,4 +1,4 @@
-T | 0 | Do CS2103T tutorial
+T | 1 | Do CS2103T tutorial
 T | 0 | Do CS2109S Problem Set 0
-D | 0 | love | 2003-5-12 1800
 T | 0 | README
+T | 0 | Last Touched 12 Sep
