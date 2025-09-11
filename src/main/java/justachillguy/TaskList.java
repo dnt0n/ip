@@ -39,12 +39,6 @@ public class TaskList {
         taskList.add(task);
         this.storage.saveTasks(this.taskList);
 
-        UI.display(
-                "Sure man, I've added this task for ya:\n"
-                        + "  " + task + "\n"
-                        + "You've got " + taskList.size() + " tasks in the list yea"
-        );
-
         return  "Sure man, I've added this task for ya:\n"
                 + "  " + task + "\n"
                 + "You've got " + taskList.size() + " tasks in the list yea";
@@ -58,17 +52,12 @@ public class TaskList {
      */
     public String markTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
-            UI.display("Hey, enter a valid index!");
             return "Hey, enter a valid index!";
         }
 
         Task task = taskList.get(i - 1);
         task.mark();
         this.storage.saveTasks(this.taskList);
-
-        UI.display(
-                "Yo, nice job! I've marked this task as done for ya:\n" + task
-        );
 
         return "Yo, nice job! I've marked this task as done for ya:\n" + task;
     }
@@ -81,17 +70,12 @@ public class TaskList {
      */
     public String unmarkTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
-            UI.display("Hey, enter a valid index!");
             return "Hey, enter a valid index!";
         }
 
         Task task = taskList.get(i - 1);
         task.unmark();
         this.storage.saveTasks(this.taskList);
-
-        UI.display(
-                "Alright! I've unmarked this task as not done for ya:\n" + task
-        );
 
         return "Alright! I've unmarked this task as not done for ya:\n" + task;
     }
@@ -104,18 +88,11 @@ public class TaskList {
      */
     public String deleteTask(int i) throws JustAChillGuyException {
         if (i < 1 || i > taskList.size()) {
-            UI.display("Hey, enter a valid index!");
             return "Hey, enter a valid index!";
         }
 
         Task removedTask = taskList.remove(i - 1);
         this.storage.saveTasks(this.taskList);
-
-        UI.display(
-                "Got it, I've removed this task for ya:\n"
-                        + "  " + removedTask + "\n"
-                        + "Now you have " + taskList.size() + " tasks left in the list."
-        );
 
         return  "Got it, I've removed this task for ya:\n"
                 + "  " + removedTask + "\n"

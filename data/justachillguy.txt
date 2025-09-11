@@ -1,4 +1,7 @@
-T | 1 | Do CS2103T tutorial
+T | 0 | Do CS2103T tutorial
 T | 0 | Do CS2109S Problem Set 0
 T | 0 | README
 T | 0 | Last Touched 12 Sep
+T | 0 | abc
+T | 0 | CS2101 Presentation
+D | 0 | abc | 2003-6-19 1800

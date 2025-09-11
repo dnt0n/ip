@@ -2,16 +2,6 @@ package justachillguy;
 
 import java.util.Scanner;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.scene.image.Image;
-
 
 /**
  * The {@code JustAChillGuy} class implements a simple interactive chatbot
@@ -75,8 +65,11 @@ public class JustAChillGuy {
     /** Path to the file where tasks are stored persistently. */
     private static final String FILE_PATH = "./data/justachillguy.txt";
 
+    private static final String ERR_INVALID_INDEX = "Yo, your index isn't valid!";
+    private static final String ERR_UNKNOWN = "Oops, I don't really understand that. Try something else maybe? "
+            + "\n(Enter \"help\" to see the full list of commands)";
+
     private TaskList taskList;
-    private boolean hasGreeted = false;
 
     public JustAChillGuy() {
         Storage storage = new Storage(FILE_PATH);
@@ -112,6 +105,32 @@ public class JustAChillGuy {
      */
     public static void run() {
         boolean isRunning = true;
+        TaskList taskList = initializeTaskList();
+
+        Scanner sc = new Scanner(System.in);
+
+        UI.display(GREETING);
+
+        while (isRunning) {
+            String input = sc.nextLine().trim(); // to trim leading and trailing spaces
+            isRunning = processInput(input, taskList);
+        }
+    }
+
+    public static boolean processInput(String input, TaskList taskList) {
+        try {
+            Object[] parsed = Parser.parseInputIntoCommandAndArgs(input);
+            Command command = (Command) parsed[0];
+            String argsText = (String) parsed[1];
+            UI.display(executeCommand(command, argsText, taskList));
+            return command != Command.BYE;
+        } catch (JustAChillGuyException e) {
+            UI.display(e.getMessage());
+            return true;
+        }
+    }
+
+    private static TaskList initializeTaskList() {
         Storage storage = new Storage(FILE_PATH);
         TaskList taskList = null;
 
@@ -121,25 +140,17 @@ public class JustAChillGuy {
             UI.display(e.getMessage());
             taskList = new TaskList();
         }
-
-        Scanner sc = new Scanner(System.in);
-
-        UI.display(GREETING);
-
-        while (isRunning) {
-            String input = sc.nextLine().trim(); // to trim leading and trailing spaces
-            try {
-                Object[] parsed = Parser.parseInputIntoCommandAndArgs(input);
-                Command command = (Command) parsed[0];
-                String argsText = (String) parsed[1];
-                // handleCommand will return false if the command is bye, true otherwise
-                isRunning = handleCommand(command, argsText, taskList);
-            } catch (JustAChillGuyException e) {
-                UI.display(e.getMessage());
-            }
-        }
+        return taskList;
     }
 
+    /**
+     * Parses a raw user input string, executes the corresponding command
+     * on the chatbot's task list, and returns the response message.
+     *
+     * @param input the raw user input text entered by the user
+     * @return the chatbot's response message, or an error description
+     *         if the command could not be processed
+     */
     public String handleInput(String input) {
         String output = "";
 
@@ -147,7 +158,7 @@ public class JustAChillGuy {
             Object[] parsed = Parser.parseInputIntoCommandAndArgs(input);
             Command command = (Command) parsed[0];
             String argsText = (String) parsed[1];
-            output = handleCommandGui(command, argsText, this.taskList);
+            output = executeCommand(command, argsText, this.taskList);
         } catch (JustAChillGuyException e) {
             output = e.getMessage();
         }
@@ -156,139 +167,16 @@ public class JustAChillGuy {
     }
 
     /**
-     * Handles a single user command by delegating to the appropriate
-     * action on the task list or UI.
+     * Handles a single user command in GUI mode and returns the chatbot's response.
      *
-     * @param command  the command to execute
-     * @param argsText the arguments provided with the command
-     * @param taskList the current list of tasks
-     * @return {@code false} if the command is {@code bye} (to stop the program),
-     *         {@code true} otherwise
-     * @throws JustAChillGuyException if the command arguments are invalid
-     *                                or if the command is not recognized
+     * @param command  the {@link Command} parsed from user input
+     * @param argsText the arguments provided with the command, may be empty
+     * @param taskList the current list of tasks managed by the chatbot
+     * @return the response message as a string, intended for display in the UI
+     * @throws JustAChillGuyException if the command is not recognized or
+     *                                if its arguments are invalid
      */
-    public static boolean handleCommand(Command command, String argsText, TaskList taskList)
-            throws JustAChillGuyException {
-        switch (command) {
-        case BYE:
-            UI.display(GOODBYE);
-            return false; // this will set isRunning to false;
-
-        case HELLO:
-            UI.display(HELLO);
-            break;
-
-        case HELP:
-            UI.display(HELP);
-            break;
-
-        case LIST:
-            UI.display(taskList.toString());
-            break;
-
-        case FIND:
-            String keyword = argsText;
-            String outputList = taskList.findTasksBasedOnKeyword(keyword);
-            if (outputList.isEmpty()) {
-                UI.display("Oops, I can't find any matching tasks :(");
-            } else {
-                UI.display("Sure! I've found these matching tasks for yea!\n" + outputList);
-            }
-            break;
-
-        case MARK:
-            try {
-                int index = Integer.parseInt(argsText);
-                taskList.markTask(index);
-            } catch (NumberFormatException e) {
-                throw new JustAChillGuyException("Yo, your index isn't valid!");
-            }
-            break;
-
-        case UNMARK:
-            try {
-                int index = Integer.parseInt(argsText);
-                taskList.unmarkTask(index);
-            } catch (NumberFormatException e) {
-                throw new JustAChillGuyException("Yo, your index isn't valid!");
-            }
-            break;
-
-        case TODO:
-            if (argsText.isEmpty()) {
-                throw new JustAChillGuyException("Yo, what todo task do you want me to add to the list?");
-            }
-            taskList.addTask(new ToDo(argsText));
-            break;
-
-        case DEADLINE:
-            if (argsText.isEmpty()) { // if there is no argument body
-                throw new JustAChillGuyException("Yo, what deadline do you want me to add to the list?");
-            }
-            if (!argsText.contains("/by")) { // if no /by used
-                throw new JustAChillGuyException("Yo, specify the deadline using /by!");
-            }
-
-            String[] nameAndBy = argsText.split("/by", 2);
-            String deadlineName = nameAndBy[0].trim();
-            String by = nameAndBy[1].trim();
-
-            if (deadlineName.isEmpty()) {
-                throw new JustAChillGuyException("Yo, your task has no name!");
-            }
-            if (by.isEmpty()) {
-                throw new JustAChillGuyException("Yo, what is the deadline of your task?");
-            }
-
-            taskList.addTask(new Deadline(deadlineName, by));
-            break;
-
-        case EVENT:
-            if (argsText.isEmpty()) { // if no argument body
-                throw new JustAChillGuyException("Yo, what event do you want me to add to the list?");
-            }
-            if (!argsText.contains("/from") || !argsText.contains("/to")) { // if missing required keywords
-                throw new JustAChillGuyException("Yo, specify the event duration using /from and /to!");
-            }
-
-            String[] nameAndFrom = argsText.split("/from", 2);
-            String eventName = nameAndFrom[0].trim();
-
-            if (eventName.isEmpty()) {
-                throw new JustAChillGuyException("Yo, your event has no name!");
-            }
-
-            String[] fromAndTo = nameAndFrom[1].split("/to", 2);
-            String from = fromAndTo[0].trim();
-            String to = fromAndTo[1].trim();
-
-            if (from.isEmpty()) {
-                throw new JustAChillGuyException("Yo, when does your event start? (/from ...)");
-            }
-            if (to.isEmpty()) {
-                throw new JustAChillGuyException("Yo, when does your event end? (/to ...)");
-            }
-
-            taskList.addTask(new Event(eventName, from, to));
-            break;
-
-        case DELETE:
-            try {
-                int index = Integer.parseInt(argsText);
-                taskList.deleteTask(index);
-            } catch (NumberFormatException e) {
-                throw new JustAChillGuyException("Yo, your index isn't valid!");
-            }
-            break;
-
-        default:
-            throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe?");
-        }
-
-        return true;
-    }
-
-    public static String handleCommandGui(Command command, String argsText, TaskList taskList)
+    public static String executeCommand(Command command, String argsText, TaskList taskList)
             throws JustAChillGuyException {
         switch (command) {
         case GREET:
@@ -307,99 +195,125 @@ public class JustAChillGuy {
             return taskList.toString();
 
         case FIND:
-            String keyword = argsText;
-            if (keyword == "") {
-                return "What do you want me to find for ya?";
-            }
-            String outputList = taskList.findTasksBasedOnKeyword(keyword);
-            if (outputList.isEmpty()) {
-                return "Oops, I can't find any matching tasks :(";
-            } else {
-                return "Sure! I've found these matching tasks for yea!\n" + outputList;
-            }
+            return handleFindCommand(argsText, taskList);
 
         case MARK:
-            try {
-                int index = Integer.parseInt(argsText);
-                return taskList.markTask(index);
-            } catch (NumberFormatException e) {
-                throw new JustAChillGuyException("Yo, your index isn't valid!");
-            }
+            return handleMarkCommand(argsText, taskList);
 
         case UNMARK:
-            try {
-                int index = Integer.parseInt(argsText);
-                return taskList.unmarkTask(index);
-            } catch (NumberFormatException e) {
-                throw new JustAChillGuyException("Yo, your index isn't valid!");
-            }
+            return handleUnmarkCommand(argsText, taskList);
 
         case TODO:
-            if (argsText.isEmpty()) {
-                throw new JustAChillGuyException("Yo, what todo task do you want me to add to the list?");
-            }
-            return taskList.addTask(new ToDo(argsText));
+            return handleTodoCommand(argsText, taskList);
 
         case DEADLINE:
-            if (argsText.isEmpty()) { // if there is no argument body
-                throw new JustAChillGuyException("Yo, what deadline do you want me to add to the list?");
-            }
-            if (!argsText.contains("/by")) { // if no /by used
-                throw new JustAChillGuyException("Yo, specify the deadline using /by!");
-            }
-
-            String[] nameAndBy = argsText.split("/by", 2);
-            String deadlineName = nameAndBy[0].trim();
-            String by = nameAndBy[1].trim();
-
-            if (deadlineName.isEmpty()) {
-                throw new JustAChillGuyException("Yo, your task has no name!");
-            }
-            if (by.isEmpty()) {
-                throw new JustAChillGuyException("Yo, what is the deadline of your task?");
-            }
-
-            return taskList.addTask(new Deadline(deadlineName, by));
+            return handleDeadlineCommand(argsText, taskList);
 
         case EVENT:
-            if (argsText.isEmpty()) { // if no argument body
-                throw new JustAChillGuyException("Yo, what event do you want me to add to the list?");
-            }
-            if (!argsText.contains("/from") || !argsText.contains("/to")) { // if missing required keywords
-                throw new JustAChillGuyException("Yo, specify the event duration using /from and /to!");
-            }
-
-            String[] nameAndFrom = argsText.split("/from", 2);
-            String eventName = nameAndFrom[0].trim();
-
-            if (eventName.isEmpty()) {
-                throw new JustAChillGuyException("Yo, your event has no name!");
-            }
-
-            String[] fromAndTo = nameAndFrom[1].split("/to", 2);
-            String from = fromAndTo[0].trim();
-            String to = fromAndTo[1].trim();
-
-            if (from.isEmpty()) {
-                throw new JustAChillGuyException("Yo, when does your event start? (/from ...)");
-            }
-            if (to.isEmpty()) {
-                throw new JustAChillGuyException("Yo, when does your event end? (/to ...)");
-            }
-
-            return taskList.addTask(new Event(eventName, from, to));
+            return handleEventCommand(argsText, taskList);
 
         case DELETE:
-            try {
-                int index = Integer.parseInt(argsText);
-                return taskList.deleteTask(index);
-            } catch (NumberFormatException e) {
-                throw new JustAChillGuyException("Yo, your index isn't valid!");
-            }
+            return handleDeleteCommand(argsText, taskList);
 
         default:
-            throw new JustAChillGuyException("Oops, I don't really understand that. Try something else maybe? "
-                    + "\n(Enter \"help\" to see the full list of commands)");
+            throw new JustAChillGuyException(ERR_UNKNOWN);
+        }
+    }
+
+    private static String handleDeleteCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
+        try {
+            int index = Integer.parseInt(argsText);
+            return taskList.deleteTask(index);
+        } catch (NumberFormatException e) {
+            throw new JustAChillGuyException(ERR_INVALID_INDEX);
+        }
+    }
+
+    private static String handleEventCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
+        if (argsText.isEmpty()) { // if no argument body
+            throw new JustAChillGuyException("Yo, what event do you want me to add to the list?");
+        }
+        if (!argsText.contains("/from") || !argsText.contains("/to")) { // if missing required keywords
+            throw new JustAChillGuyException("Yo, specify the event duration using /from and /to!");
+        }
+
+        String[] nameAndFrom = argsText.split("/from", 2);
+        String eventName = nameAndFrom[0].trim();
+
+        if (eventName.isEmpty()) {
+            throw new JustAChillGuyException("Yo, your event has no name!");
+        }
+
+        String[] fromAndTo = nameAndFrom[1].split("/to", 2);
+        String from = fromAndTo[0].trim();
+        String to = fromAndTo[1].trim();
+
+        if (from.isEmpty()) {
+            throw new JustAChillGuyException("Yo, when does your event start? (/from ...)");
+        }
+        if (to.isEmpty()) {
+            throw new JustAChillGuyException("Yo, when does your event end? (/to ...)");
+        }
+
+        return taskList.addTask(new Event(eventName, from, to));
+    }
+
+    private static String handleDeadlineCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
+        if (argsText.isEmpty()) { // if there is no argument body
+            throw new JustAChillGuyException("Yo, what deadline do you want me to add to the list?");
+        }
+        if (!argsText.contains("/by")) { // if no /by used
+            throw new JustAChillGuyException("Yo, specify the deadline using /by!");
+        }
+
+        String[] nameAndBy = argsText.split("/by", 2);
+        String deadlineName = nameAndBy[0].trim();
+        String by = nameAndBy[1].trim();
+
+        if (deadlineName.isEmpty()) {
+            throw new JustAChillGuyException("Yo, your task has no name!");
+        }
+        if (by.isEmpty()) {
+            throw new JustAChillGuyException("Yo, what is the deadline of your task?");
+        }
+
+        return taskList.addTask(new Deadline(deadlineName, by));
+    }
+
+    private static String handleTodoCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
+        if (argsText.isEmpty()) {
+            throw new JustAChillGuyException("Yo, what todo task do you want me to add to the list?");
+        }
+        return taskList.addTask(new ToDo(argsText));
+    }
+
+    private static String handleUnmarkCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
+        try {
+            int index = Integer.parseInt(argsText);
+            return taskList.unmarkTask(index);
+        } catch (NumberFormatException e) {
+            throw new JustAChillGuyException("Yo, your index isn't valid!");
+        }
+    }
+
+    private static String handleMarkCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
+        try {
+            int index = Integer.parseInt(argsText);
+            return taskList.markTask(index);
+        } catch (NumberFormatException e) {
+            throw new JustAChillGuyException("Yo, your index isn't valid!");
+        }
+    }
+
+    private static String handleFindCommand(String argsText, TaskList taskList) {
+        if (argsText.isEmpty()) {
+            return "What do you want me to find for ya?";
+        }
+        String outputList = taskList.findTasksBasedOnKeyword(argsText);
+        if (outputList.isEmpty()) {
+            return "Oops, I can't find any matching tasks :(";
+        } else {
+            return "Sure! I've found these matching tasks for yea!\n" + outputList;
         }
     }
 }
