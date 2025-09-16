@@ -17,7 +17,7 @@ public class JustAChillGuy {
     private static final String NAME = "Just A Chill Guy";
 
     /** Greeting message displayed when the chatbot starts. */
-    private static final String GREETING     =
+    private static final String GREETING =
             "Yo! I am ✨ " + NAME + " ✨ :)\nHow can I help ya? \n(Enter the command \"help\" to see the full list of actions)";
 
     /** Standard reply for the {@code hello} command. */
@@ -117,6 +117,16 @@ public class JustAChillGuy {
         }
     }
 
+    /**
+     * Processes a single line of user input in CLI mode.
+     * Parses the input into a command and arguments, executes it,
+     * and displays the corresponding output.
+     *
+     * @param input    the raw user input string
+     * @param taskList the current list of tasks
+     * @return {@code true} if the chatbot should continue running,
+     *         {@code false} if the {@code bye} command was entered
+     */
     public static boolean processInput(String input, TaskList taskList) {
         try {
             Object[] parsed = Parser.parseInputIntoCommandAndArgs(input);
@@ -132,6 +142,12 @@ public class JustAChillGuy {
         }
     }
 
+    /**
+     * Initializes the task list from persistent storage.
+     * If storage cannot be loaded, creates a new empty task list instead.
+     *
+     * @return the initialized {@link TaskList}
+     */
     private static TaskList initializeTaskList() {
         Storage storage = new Storage(FILE_PATH);
         TaskList taskList = null;
@@ -220,11 +236,18 @@ public class JustAChillGuy {
             return handleDeleteCommand(argsText, taskList);
 
         default:
-            assert false : "Unhandled command: " + command;
             throw new JustAChillGuyException(ERR_UNKNOWN);
         }
     }
 
+    /**
+     * Handles the {@code delete} command by removing a task from the list.
+     *
+     * @param argsText the argument containing the task index to delete
+     * @param taskList the current list of tasks
+     * @return a message confirming the task deletion
+     * @throws JustAChillGuyException if the index is invalid
+     */
     private static String handleDeleteCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
         try {
             int index = Integer.parseInt(argsText);

@@ -96,7 +96,7 @@ public class TaskList {
         Task removedTask = taskList.remove(i - 1);
         this.storage.saveTasks(this.taskList);
 
-        return  "Got it, I've removed this task for ya:\n"
+        return "Got it, I've removed this task for ya:\n"
                 + "  " + removedTask + "\n"
                 + "Now you have " + taskList.size() + " tasks left in the list.";
     }
@@ -119,6 +119,7 @@ public class TaskList {
         }
         return sb.toString();
     }
+
 
     /**
      * Returns a string representation of all tasks in the list.
