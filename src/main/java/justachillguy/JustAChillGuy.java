@@ -257,6 +257,18 @@ public class JustAChillGuy {
         }
     }
 
+    /**
+     * Handles the {@code event} command by creating a new event task.
+     * <p>
+     * The argument text must contain the event name, a start time specified
+     * with {@code /from}, and an end time specified with {@code /to}.
+     * </p>
+     *
+     * @param argsText the string containing the event details
+     * @param taskList the task list to modify
+     * @return the confirmation message after adding the event
+     * @throws JustAChillGuyException if the event name or duration is missing or invalid
+     */
     private static String handleEventCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
         if (argsText.isEmpty()) { // if no argument body
             throw new JustAChillGuyException("Yo, what event do you want me to add to the list?");
@@ -286,6 +298,18 @@ public class JustAChillGuy {
         return taskList.addTask(new Event(eventName, from, to));
     }
 
+    /**
+     * Handles the {@code deadline} command by creating a new deadline task.
+     * <p>
+     * The argument text must contain the task name and a deadline specified
+     * with {@code /by}.
+     * </p>
+     *
+     * @param argsText the string containing the deadline details
+     * @param taskList the task list to modify
+     * @return the confirmation message after adding the deadline
+     * @throws JustAChillGuyException if the task name or deadline is missing or invalid
+     */
     private static String handleDeadlineCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
         if (argsText.isEmpty()) { // if there is no argument body
             throw new JustAChillGuyException("Yo, what deadline do you want me to add to the list?");
@@ -308,6 +332,14 @@ public class JustAChillGuy {
         return taskList.addTask(new Deadline(deadlineName, by));
     }
 
+    /**
+     * Handles the {@code todo} command by creating a new to-do task.
+     *
+     * @param argsText the string containing the task description
+     * @param taskList the task list to modify
+     * @return the confirmation message after adding the to-do task
+     * @throws JustAChillGuyException if the task description is missing
+     */
     private static String handleTodoCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
         if (argsText.isEmpty()) {
             throw new JustAChillGuyException("Yo, what todo task do you want me to add to the list?");
@@ -315,6 +347,14 @@ public class JustAChillGuy {
         return taskList.addTask(new ToDo(argsText));
     }
 
+    /**
+     * Handles the {@code unmark} command by marking a task as not done.
+     *
+     * @param argsText the string containing the task index to unmark
+     * @param taskList the task list to modify
+     * @return the confirmation message after unmarking the task
+     * @throws JustAChillGuyException if the index is not a valid integer
+     */
     private static String handleUnmarkCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
         try {
             int index = Integer.parseInt(argsText);
@@ -324,6 +364,14 @@ public class JustAChillGuy {
         }
     }
 
+    /**
+     * Handles the {@code mark} command by marking a task as done.
+     *
+     * @param argsText the string containing the task index to mark
+     * @param taskList the task list to modify
+     * @return the confirmation message after marking the task
+     * @throws JustAChillGuyException if the index is not a valid integer
+     */
     private static String handleMarkCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
         try {
             int index = Integer.parseInt(argsText);
