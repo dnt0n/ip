@@ -381,6 +381,15 @@ public class JustAChillGuy {
         }
     }
 
+    /**
+     * Handles the {@code find} command by searching tasks that match
+     * a given keyword.
+     *
+     * @param argsText the search keyword
+     * @param taskList the task list to search
+     * @return a message containing the matching tasks, or an appropriate
+     *         message if no tasks match or the keyword is empty
+     */
     private static String handleFindCommand(String argsText, TaskList taskList) {
         if (argsText.isEmpty()) {
             return "What do you want me to find for ya?";
