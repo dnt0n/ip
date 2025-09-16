@@ -4,4 +4,4 @@ T | 0 | README | test
 T | 0 | Last Touched 12 Sep
 T | 0 | CS2101 Presentation
 D | 0 | abc | 2003-6-19 1800 | urgent
-E | 0 | test | 2003-6-19 1800 | 2003-6-20 2000 | urgent
+E | 1 | test | 2003-6-19 1800 | 2003-6-20 2000 | urgent
