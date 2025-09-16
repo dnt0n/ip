@@ -7,6 +7,7 @@ package justachillguy;
 public class Task {
     private String name;
     private boolean isDone;
+    private String tag;
 
     /**
      * Creates a new {@code Task}.
@@ -16,6 +17,53 @@ public class Task {
     public Task(String name) {
         this.name = name;
         this.isDone = false;
+        this.tag = "";
+    }
+
+    /**
+     * Creates a new {@code Task} with the given name and tag.
+     *
+     * @param name the task name
+     * @param tag  the initial tag for the task
+     */
+    public Task(String name, String tag) {
+        this(name);
+        addTag(tag);
+    }
+
+    /**
+     * Adds or updates the task's tag.
+     *
+     * @param tag the tag to set
+     * @throws IllegalArgumentException if the tag is null or empty
+     */
+    public void addTag(String tag) {
+        this.tag = tag.trim();
+    }
+
+    /**
+     * Removes the task's tag, leaving it untagged.
+     */
+    public void removeTag() {
+        this.tag = "";
+    }
+
+    /**
+     * Checks if the task has a tag assigned.
+     *
+     * @return {@code true} if the task has a tag, {@code false} otherwise
+     */
+    public boolean isTagged() {
+        return !tag.isEmpty();
+    }
+
+    /**
+     * Gets the current tag of the task.
+     *
+     * @return the tag string, or an empty string if untagged
+     */
+    public String getTag() {
+        return tag;
     }
 
     /**
@@ -56,7 +104,9 @@ public class Task {
      * @return string in save file format
      */
     public String getSaveFormat() {
-        return "Task | " + (this.isDone() ? 1 : 0) + " | " + this.getName();
+        return "Task | " + (this.isDone() ? 1 : 0) + " | "
+                + this.getName()
+                + (this.isTagged() ? " | " + this.tag : "");
     }
 
     /**
@@ -78,6 +128,6 @@ public class Task {
     @Override
     public String toString() {
         String status = "[" + (this.isDone ? "X" : " ") + "] ";
-        return status + this.name;
+        return status + this.name + (this.isTagged() ? " [#" + this.tag + "]" : "");
     }
 }

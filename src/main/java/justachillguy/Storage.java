@@ -1,18 +1,17 @@
 package justachillguy;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Handles saving and loading of tasks from a file.
  */
 public class Storage {
-    private String filePath;
+    private final String filePath;
 
     /**
      * Creates a new {@code Storage} object.
@@ -43,15 +42,14 @@ public class Storage {
             }
         }
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line = br.readLine();
-            while (line != null) {
-                Task task = TaskFactory.parseTask(line);
-                tasks.add(task);
-                line = br.readLine();
+        try (Scanner sc = new Scanner(new FileReader(file))) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                if (!line.isBlank()) {
+                    Task task = TaskFactory.parseTask(line);
+                    tasks.add(task);
+                }
             }
-            br.close();
         } catch (IOException e) {
             throw new JustAChillGuyException("Error reading file :(");
         }
@@ -62,18 +60,21 @@ public class Storage {
     /**
      * Saves the given list of tasks to the save file.
      * Overwrites the file if it already exists.
+     * <p>
+     * Unlike buffered I/O, this method writes to disk immediately
+     * after being called.
+     * </p>
      *
      * @param tasks the list of tasks to save
      * @throws JustAChillGuyException if there are errors writing to the file
      */
     public void saveTasks(ArrayList<Task> tasks) throws JustAChillGuyException {
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filePath)); // rewrites the file
+        try (FileWriter fw = new FileWriter(filePath, false)) { // overwrite mode
             for (Task task : tasks) {
-                bw.write(task.getSaveFormat());
-                bw.newLine();
+                fw.write(task.getSaveFormat());
+                fw.write(System.lineSeparator());
             }
-            bw.close();
+            fw.flush(); // force immediate flush to disk
         } catch (IOException e) {
             throw new JustAChillGuyException("I am having trouble saving to the file :(");
         }

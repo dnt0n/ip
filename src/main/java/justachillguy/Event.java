@@ -50,6 +50,7 @@ public class Event extends Task {
         return "E | " + (this.isDone() ? 1 : 0) + " | "
                 + this.getName() + " | "
                 + this.from.format(formatter) + " | "
-                + this.to.format(formatter);
+                + this.to.format(formatter)
+                + (this.isTagged() ? " | " + this.getTag() : "");
     }
 }

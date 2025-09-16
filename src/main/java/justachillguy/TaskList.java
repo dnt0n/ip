@@ -101,6 +101,44 @@ public class TaskList {
                 + "Now you have " + taskList.size() + " tasks left in the list.";
     }
 
+    public String tagTask(int i, String tag) throws JustAChillGuyException {
+        if (i < 1 || i > taskList.size()) {
+            return "Hey, enter a valid index!";
+        }
+
+        Task task = taskList.get(i - 1);
+        String prevTag = task.getTag();
+
+        task.addTag(tag);
+        this.storage.saveTasks(this.taskList);
+
+        return "Got it, I've tagged this task for ya:\n"
+                + "  " + task + "\n"
+                + "  Previous tag: " + (prevTag.isEmpty() ? "No previous tag" : "#" + prevTag) + "\n"
+                + "  New tag: " + "#" + tag;
+    }
+
+    public String untagTask(int i) throws JustAChillGuyException {
+        if (i < 1 || i > taskList.size()) {
+            return "Hey, enter a valid index!";
+        }
+
+        Task task = taskList.get(i - 1);
+
+        if (!task.isTagged()) {
+            return "You can't untag a task with no tag!";
+        }
+
+        String prevTag = task.getTag();
+
+        task.removeTag();
+        this.storage.saveTasks(this.taskList);
+
+        return "Got it, I've untagged this task for ya:\n"
+                + "  " + task + "\n"
+                + "  Previous tag: " + (prevTag.isEmpty() ? "No previous tag" : "#" + prevTag);
+    }
+
     /**
      * Finds tasks that contain the given keyword.
      *

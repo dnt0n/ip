@@ -53,6 +53,8 @@ public class JustAChillGuy {
                     + "   mark <index>         - Mark the task at position <index> as done\n"
                     + "   unmark <index>       - Mark the task at position <index> as not done\n"
                     + "   delete <index>       - Remove the task at position <index>\n"
+                    + "   tag <index> <tag>    - Assign a tag to the task at position <index>\n"
+                    + "   untag <index>        - Remove the tag from the task at position <index>\n"
                     + "\n"
                     + "👉 Search:\n"
                     + "   find <keyword>       - Find all tasks containing <keyword>\n"
@@ -236,6 +238,12 @@ public class JustAChillGuy {
         case DELETE:
             return handleDeleteCommand(argsText, taskList);
 
+        case TAG:
+            return handleTagCommand(argsText, taskList);
+
+        case UNTAG:
+            return handleUntagCommand(argsText, taskList);
+
         default:
             throw new JustAChillGuyException(ERR_UNKNOWN);
         }
@@ -400,6 +408,35 @@ public class JustAChillGuy {
             return "Oops, I can't find any matching tasks :(";
         } else {
             return "Sure! I've found these matching tasks for yea!\n" + outputList;
+        }
+    }
+
+    private static String handleUntagCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
+        try {
+            int index = Integer.parseInt(argsText);
+            return taskList.untagTask(index);
+        } catch (NumberFormatException e) {
+            throw new JustAChillGuyException("Yo, your index isn't valid!");
+        }
+    }
+
+    private static String handleTagCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
+        if (argsText.isEmpty()) {
+            throw new JustAChillGuyException("Yo, you need to specify an index!");
+        }
+
+        String[] indexAndTag = argsText.split(" ", 2);
+
+        if (indexAndTag.length < 2) {
+            throw new JustAChillGuyException("Yo, you need to specify a tag!");
+        }
+
+        try {
+            int index = Integer.parseInt(indexAndTag[0]);
+            String tag = indexAndTag[1];
+            return taskList.tagTask(index, tag);
+        } catch (NumberFormatException e) {
+            throw new JustAChillGuyException("Yo, your index isn't valid!");
         }
     }
 }

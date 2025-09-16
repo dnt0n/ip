@@ -32,6 +32,7 @@ public class ToDo extends Task {
      */
     @Override
     public String getSaveFormat() {
-        return "T | " + (this.isDone() ? 1 : 0) + " | " + this.getName();
+        return "T | " + (this.isDone() ? 1 : 0) + " | " + this.getName()
+                + (this.isTagged() ? " | " + this.getTag() : "");
     }
 }

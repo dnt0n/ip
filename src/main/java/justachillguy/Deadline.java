@@ -44,6 +44,7 @@ public class Deadline extends Task {
     public String getSaveFormat() {
         // note to self: remember to remove magic strings like this and make them constants
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HHmm");
-        return "D | " + (this.isDone() ? 1 : 0) + " | " + this.getName() + " | " + this.byTime.format(formatter);
+        return "D | " + (this.isDone() ? 1 : 0) + " | " + this.getName() + " | " + this.byTime.format(formatter)
+                + (this.isTagged() ? " | " + this.getTag() : "");
     }
 }

@@ -8,7 +8,7 @@ package justachillguy;
  * to handle user input and map it to program actions.
  */
 public enum Command {
-    GREET, HELLO, BYE, HELP, LIST, FIND, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, UNKNOWN;
+    GREET, HELLO, BYE, HELP, LIST, FIND, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, TAG, UNTAG, UNKNOWN;
 
     /**
      * Converts a user input string into a corresponding {@link Command}.
