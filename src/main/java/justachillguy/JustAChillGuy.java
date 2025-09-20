@@ -74,6 +74,14 @@ public class JustAChillGuy {
 
     private TaskList taskList;
 
+    /**
+     * Default constructor for the chatbot.
+     * <p>
+     * Initializes persistent storage at {@link #FILE_PATH}, attempts to
+     * load an existing {@link TaskList}, and falls back to an empty
+     * list if loading fails.
+     * </p>
+     */
     public JustAChillGuy() {
         Storage storage = new Storage(FILE_PATH);
 
@@ -369,7 +377,7 @@ public class JustAChillGuy {
             int index = Integer.parseInt(argsText);
             return taskList.unmarkTask(index);
         } catch (NumberFormatException e) {
-            throw new JustAChillGuyException("Yo, your index isn't valid!");
+            throw new JustAChillGuyException(ERR_INVALID_INDEX);
         }
     }
 
@@ -386,7 +394,7 @@ public class JustAChillGuy {
             int index = Integer.parseInt(argsText);
             return taskList.markTask(index);
         } catch (NumberFormatException e) {
-            throw new JustAChillGuyException("Yo, your index isn't valid!");
+            throw new JustAChillGuyException(ERR_INVALID_INDEX);
         }
     }
 
@@ -411,15 +419,31 @@ public class JustAChillGuy {
         }
     }
 
+    /**
+     * Handles the {@code untag} command by removing a tag from a task.
+     *
+     * @param argsText the string containing the task index to untag
+     * @param taskList the current list of tasks
+     * @return a confirmation message after removing the tag
+     * @throws JustAChillGuyException if the index is invalid
+     */
     private static String handleUntagCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
         try {
             int index = Integer.parseInt(argsText);
             return taskList.untagTask(index);
         } catch (NumberFormatException e) {
-            throw new JustAChillGuyException("Yo, your index isn't valid!");
+            throw new JustAChillGuyException(ERR_INVALID_INDEX);
         }
     }
 
+    /**
+     * Handles the {@code tag} command by adding a tag to a task.
+     *
+     * @param argsText the string containing the task index and tag value
+     * @param taskList the current list of tasks
+     * @return a confirmation message after tagging the task
+     * @throws JustAChillGuyException if the index or tag is missing or invalid
+     */
     private static String handleTagCommand(String argsText, TaskList taskList) throws JustAChillGuyException {
         if (argsText.isEmpty()) {
             throw new JustAChillGuyException("Yo, you need to specify an index!");
@@ -436,7 +460,7 @@ public class JustAChillGuy {
             String tag = indexAndTag[1];
             return taskList.tagTask(index, tag);
         } catch (NumberFormatException e) {
-            throw new JustAChillGuyException("Yo, your index isn't valid!");
+            throw new JustAChillGuyException(ERR_INVALID_INDEX);
         }
     }
 }
