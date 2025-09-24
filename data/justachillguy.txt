@@ -1,7 +1,3 @@
-T | 1 | Do CS2103T tutorial | test
-T | 1 | Do CS2109S Problem Set 0 | test
-T | 0 | README | test
-T | 0 | Last Touched 12 Sep
-T | 0 | CS2101 Presentation
-D | 0 | abc | 2003-6-19 1800 | urgent
-E | 1 | test | 2003-6-19 1800 | 2003-6-20 2000 | urgent
+T | 0 | cs2103t ip
+D | 1 | abc | 2003-6-19 1800 | urgent
+E | 1 | testtest | 2003-6-18 1700 | 2004-6-20 2000 | not urgent

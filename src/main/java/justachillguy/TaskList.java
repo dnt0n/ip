@@ -30,6 +30,10 @@ public class TaskList {
         assert this.taskList != null : "Task list should not be null after loading from storage";
     }
 
+    public boolean isEmpty() {
+        return this.taskList.isEmpty();
+    }
+
     /**
      * Adds a new task to the list and saves it.
      *

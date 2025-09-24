@@ -18,7 +18,7 @@ public class JustAChillGuy {
 
     /** Greeting message displayed when the chatbot starts. */
     private static final String GREETING =
-            "Yo! I am ✨ " + NAME + " ✨ :)\nHow can I help ya? \n(Enter the command \"help\" to see the full list of actions)";
+            "Yo! I am " + NAME + " :)\nHow can I help ya? \n(Enter the command \"help\" to see the full list of actions)";
 
     /** Standard reply for the {@code hello} command. */
     private static final String HELLO = "Hey, how is it going?";
@@ -28,42 +28,42 @@ public class JustAChillGuy {
 
     /** Help menu that lists all supported commands. */
     private static final String HELP =
-            "Here’s what I can do for ya:\n"
+            "Here is what I can do for ya:\n"
                     + "\n"
-                    + "👉 Basic commands:\n"
-                    + "   greet                - I’ll introduce myself\n"
-                    + "   hello                - I’ll greet you back\n"
+                    + "** Basic commands:\n"
+                    + "   greet                - I will introduce myself\n"
+                    + "   hello                - I will greet you back\n"
                     + "   bye                  - Exit the program\n"
                     + "   list                 - Show all your tasks\n"
                     + "   help                 - Show this help menu\n"
                     + "\n"
-                    + "👉 Task management:\n"
+                    + "** Task management:\n"
                     + "   todo <task name>     - Add a ToDo task\n"
                     + "   deadline <name> /by <date/time>\n"
                     + "                        - Add a Deadline task (must include /by)\n"
                     + "   event <name> /from <start> /to <end>\n"
                     + "                        - Add an Event task (must include both /from and /to)\n"
                     + "\n"
-                    + "👉 Date & Time formats:\n"
+                    + "** Date & Time formats:\n"
                     + "   - Use yyyy-MM-dd for dates (e.g., 2025-09-04)\n"
                     + "   - Use HHmm for 24-hour time (e.g., 1830)\n"
                     + "   - Combine them like yyyy-MM-dd HHmm (e.g., 2025-09-04 1400)\n"
                     + "\n"
-                    + "👉 Task updates:\n"
+                    + "** Task updates:\n"
                     + "   mark <index>         - Mark the task at position <index> as done\n"
                     + "   unmark <index>       - Mark the task at position <index> as not done\n"
                     + "   delete <index>       - Remove the task at position <index>\n"
                     + "   tag <index> <tag>    - Assign a tag to the task at position <index>\n"
                     + "   untag <index>        - Remove the tag from the task at position <index>\n"
                     + "\n"
-                    + "👉 Search:\n"
+                    + "** Search:\n"
                     + "   find <keyword>       - Find all tasks containing <keyword>\n"
                     + "\n"
-                    + "👉 Notes:\n"
+                    + "** Notes:\n"
                     + "   - Index numbers start at 1 (as shown in list).\n"
                     + "   - Tasks are auto-saved after every change.\n"
                     + "\n"
-                    + "✨ Chill and let me handle your tasks for ya! ✨";
+                    + " Chill and let me handle your tasks for ya! ";
 
     /** Path to the file where tasks are stored persistently. */
     private static final String FILE_PATH = "./data/justachillguy.txt";
@@ -106,7 +106,7 @@ public class JustAChillGuy {
      * Generates a response for the user's chat message
      */
     public String getResponse(String input) {
-        return "✨ Just A Chill Guy ✨ said: \n" + handleInput(input);
+        return "Just A Chill Guy said: \n" + handleInput(input);
     }
 
     /**
@@ -410,6 +410,9 @@ public class JustAChillGuy {
     private static String handleFindCommand(String argsText, TaskList taskList) {
         if (argsText.isEmpty()) {
             return "What do you want me to find for ya?";
+        }
+        if (taskList.isEmpty()) {
+            return "Oops, there is nothing to find because the list is empty.";
         }
         String outputList = taskList.findTasksBasedOnKeyword(argsText);
         if (outputList.isEmpty()) {
